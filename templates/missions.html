@@ -1,0 +1,136 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content%}
+
+<style>
+  @media (max-width: 991.98px) {
+    /* On small screens, display table cells as block elements with 100% width */
+    .table tbody,
+    .table thead,
+    .table th,
+    .table td,
+    .table tr {
+      display: block;
+      width: 100%;
+    }
+    
+    /* Hide the table header row on small screens */
+    .table thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    /* Show the table cells as stacked blocks */
+    .table td {
+      position: relative;
+      padding-left: 50%;
+      text-align: left;
+    }
+    
+    .table td::before {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+    
+    /* Add content labels before each cell */
+    .table td:first-child::before { content: "Nom"; }
+    .table td:nth-child(2)::before { content: "Date"; }
+    .table td:nth-child(3)::before { content: "Ville de depart"; }
+    .table td:nth-child(4)::before { content: "Ville d'arrivée"; }
+    .table td:nth-child(5)::before { content: "Camion"; }
+  
+  }
+</style>
+<div class="text-center">
+{% for msg in messages %}
+<div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-success{% endif %} alert-dismissible fade show" role="alert">
+{{ msg }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+</div>
+</div>
+<div class="pt-5">
+<div class=" container card bg-white bg-opacity-50">
+  <div class="card-head">
+    <h1 class="fs-3" >Missions en cours</h1>
+  </div>
+  <div class="card-body">
+    <table class="table">
+        <thead>
+          <tr>
+          <tr>
+            <th scope="col">Nom </th>
+            <th scope="col">Date</th>
+            <th scope="col">Ville de Depart</th>
+            <th scope="col">Ville d'arrivée</th>
+            <th scope="col">Camion</th>
+          </tr>
+          </tr>
+        </thead>
+        {% for mission in mission %}
+        <tbody>
+           
+           <tr style="cursor:pointer;"> 
+            <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.nom_mission}}</a></td>
+            <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.date_mission}}</a></td>
+            <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_dep_mis}}</a></td>
+            <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_arr_mis}}</a></td>
+            <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_cam}}</a></td>
+          </tr> 
+       
+         
+        </tbody>
+        {% endfor %}
+      </table>  
+    </div>
+  </div>
+
+  <div class="pt-5">
+    <div class=" container card bg-white bg-opacity-50">
+      <div class="card-head">
+        <h1 class="fs-3" >Missions Terminées</h1>
+      </div>
+      <div class="card-body">
+        <table class="table">
+            <thead>
+              <tr>
+              <tr>
+                <th scope="col">Nom </th>
+                <th scope="col">Date</th>
+                <th scope="col">Ville de Depart</th>
+                <th scope="col">Ville d'arrivée</th>
+                <th scope="col">Camion</th>
+              </tr>
+              </tr>
+            </thead>
+            {% for mission in missiont %}
+            <tbody>
+               
+               <tr style="cursor:pointer;"> 
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.nom_mission}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.date_mission}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_dep_mis}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_arr_mis}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_cam}}</a></td>
+              </tr> 
+           
+             
+            </tbody>
+            {% endfor %}
+          </table>  
+        </div>
+      </div>
+
+  <br>
+  <br>
+  <br>
+
+
+{% endblock %}

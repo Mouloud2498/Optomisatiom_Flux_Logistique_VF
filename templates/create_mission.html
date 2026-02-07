@@ -1,0 +1,40 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content%}
+
+<div class="container">
+<div class="row pt-5">
+    <div class="card container-fluid pt-2 col-sm-4 bg-white bg-opacity-50">
+        <h5 class="card-header">La Commande</h5>
+        <div class="card-body pt-2">
+          <h5 class="card-title">Le Client: {{commande.id_cl|capfirst}}</h5>
+          <h5 class="card-title">Le Profi: {{ commande.profit }} DZ</h5>
+          <h5>La Date: {{ commande.date_c |capfirst}}</h5>
+          <h5>Ville de Depart: {{ commande.ville_dep|capfirst }}</h5>
+          <h5>Ville d'Arrivée: {{ commande.ville_arr|capfirst }}</h5>
+    </div>
+    </div>
+
+      <div class="card container-fluid pt-2 col-sm-4 bg-white bg-opacity-50">
+        <h5 class="card-header">Le Camion</h5>
+        <div class="card-body pt-2">
+
+          <h5 class="card-title">Numero de la carte Grise: {{ camion.num_carte_grise }}</h5>
+          <h5>Nom du Chauffeur: {{ camion.id_chauffeur_cam |capfirst}}</h5>
+          <h5>Type du Camion: {{ camion.id_tca | capfirst }}</h5>
+          <h5>Type roue du camion: {{ camion.id_tro | capfirst }}</h5>
+          <h5>L'Habillage: {{ camion.id_ha|capfirst }}</h5>
+        </div>
+      </div>
+      </div>
+
+      <div class=" d-flex justify-content-center">
+        <button type="button" class="btn" style="float: right; margin: 20px; background-color:white ;"> <a href="{% url 'confirm-mission' commande.id_commande camion.id_camion %}" style="text-decoration: none; color: black;"> Planifier La Mission</a></button>
+      </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+
+{% endblock %}

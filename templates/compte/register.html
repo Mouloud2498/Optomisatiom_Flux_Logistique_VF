@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="container bg-white shadow-md p-5 form-layout rounded w-50 h-200">
+
+        <h3>Créer un Compte Utilisateur</h3>
+
+        <h5> Enregistrez votre nouvel utilisateur dans la rubrique qui suit </h5>
+
+        <hr>
+        <br>
+         
+        <form method="POST" autocomplete="off">
+
+            {% csrf_token %}
+            
+            {{form.username|as_crispy_field}}
+            <br>
+            <br>
+            {{form.email|as_crispy_field}}
+            <br>
+            <br>
+            
+            {{form.password1|as_crispy_field}}
+            
+            <br>
+            
+            {{form.password2|as_crispy_field}}
+            
+
+            <br>
+            <br>
+
+            <button type="submit" class="btn btn-primary navbar-btn text-white w-100 p-2">&nbsp; Enregistrer le Compte </button>
+            
+            <br> <br>
+
+            <div class="text-center">
+
+                <a href="{% url 'my-login' %}"> Already have an account? </a>
+
+            </div>
+
+        </form>
+
+    </div>
+<br>
+<br>
+
+{% endblock %}

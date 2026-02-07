@@ -1,0 +1,22 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content%}
+<div class="pt-5">
+<div class="container card col-sm-6 bg-white bg-opacity-50">
+    <div class="card-head">
+        <h1 class="fs-3">Veuillez ajouter un client</h1>
+      </div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class='btn btn-primary' type="submit">Ajouter un client</button>
+        </form>
+</div>
+</div>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

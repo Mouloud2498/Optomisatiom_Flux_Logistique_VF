@@ -1,0 +1,258 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content%}
+
+{% comment %} La Mission {% endcomment %}
+  <div class="contaier">
+    {% if mission.mission_termine == 0 %}
+    <div class="d-flex justify-content-center align-items-center text-center pt-2 container bg-white bg-opacity-75 w-25" id="h1">
+    <h3 class="fs-4" > Cette mission est terminée </h3>
+    </div>
+    {% endif %}
+    {% if planificateur %}
+    <div class='pt-2 col-sm-6 text-center container '>
+      <br>
+  <a class="btn btn-info" href="{% url 'feuille-de-route' mission.id_mission %}"> Etablire la feuille de route</a>
+  
+  {% if mission.mission_termine == 1 %}
+  {% if date_cmd %}
+    <a class="btn btn-info"   href="{% url 'mission-termine' mission.id_mission %}"> Mission Terminée</a>
+    {% endif %}
+    <!-- Bouton pour déclencher la boîte modale -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+  Annuler la mission
+</button>
+    {% endif %}
+</div>
+
+</div>
+{% endif %}
+<br>
+<div class="container">
+<div class="row">
+<div class="card container pt-3 col-sm-4  bg-white bg-opacity-50">
+    <h5 class="card-header">{{mission.nom_mission|capfirst}}</h5>
+    <div class="card-body pt-2">
+      <h5>Profit: {{ profit }} DZ</h5>
+      <h5>Date: {{ mission.date_mission |capfirst}}</h5>
+      <h5>Ville de depart: {{ mission.id_dep_mis}}</h5>
+      <h5>Ville d'arrivée: {{ mission.id_arr_mis }}</h5>
+    </div>
+</div>
+
+<div class="card container-fluid pt-2 col-sm-4 bg-white bg-opacity-50">
+  <h5 class="card-header">Le Camion</h5>
+  <div class="card-body pt-2">
+
+    <h5 class="card-title">Numero de la carte Grise: {{ camion.num_carte_grise }}</h5>
+    <h5>Nom du Chauffeur: {{ camion.id_chauffeur_cam |capfirst}}</h5>
+    <h5>Type du Camion: {{ camion.id_tca | capfirst }}</h5>
+    <h5>Type roue du camion: {{ camion.id_tro | capfirst }}</h5>
+    <h5>L'Habillage: {{ camion.id_ha|capfirst }}</h5>
+  </div>
+</div>
+</div>
+</div>
+{% comment %} Les commandes de la missions {% endcomment %}
+
+<div style="display: flex;" class="container" >
+<div style="flex:1;" class="col-md-4 mb-4 container"> 
+  <div class="pt-5">
+    <div class="pt-2 card text-center container bg-white bg-opacity-50">
+      <div class="card-head">
+        <h1 class="fs-5">Les Commandes en mission</h1></div>
+      <div class="card-body  ">
+        <table class="table">
+            <thead>
+              <tr>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">date </th>
+                <th scope="col">Client</th>
+                <th scope="col">Profit</th>
+                <th scope="col">Ville de Depart</th>
+                <th scope="col">Ville de Destination</th>
+                {% if planificateur %}
+                {% if showaction %}
+                {% if mission.mission_termine == 1 %}
+                <th scope="col">Action</th>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+              </tr>
+              </tr>
+            </thead>
+
+    {% for commande in commande %}
+    <tbody>
+       
+      <tr> 
+        <th scope="row"><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_commande}}</a></th>
+         <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.date_c}}</a></td>
+         <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_cl}}</a></td>
+         <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.profit}}</a></td>
+         <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.ville_dep}}</a></td>
+         <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.ville_arr}}</a></td>
+         {% if planificateur %}
+         {% if not forloop.last %}
+         {% comment %} {% if show_action %} {% endcomment %}
+         <td>
+          
+          {% if mission.mission_termine == 1 %}
+          
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="cmd_id" value="{{ commande.id_commande }}">
+            <button  type="submit" name="minus" value="minus" class="btn btn-info"><i class="fa-solid fa-minus"></i></button>
+          </form>
+          {% endif %}
+        </td>
+
+        {% else %}
+        <td>
+         
+         {% if mission.mission_termine == 1 %}
+         
+         <form method="POST">
+           {% csrf_token %}
+           <input type="hidden" name="cmd_id" value="{{ commande.id_commande }}">
+           <button style="display:none;" type="submit" name="minus" value="minus" class="btn btn-info"><i style="display:none;" class="fa-solid fa-minus"></i></button>
+         </form>
+         {% endif %}
+         {% comment %} {% endif %} {% endcomment %}
+         
+
+
+       </td>
+
+       {% endif %}
+       {% endif %}
+       </tr> 
+   
+     
+    </tbody>
+    {% endfor %}
+
+</table>  
+</div>
+</div>
+</div>
+</div>
+{% if planificateur %}
+{% if mission.mission_termine == 1 %}
+{% if cmd %}
+{% comment %} Les commandes qu'on peut rajouter a la mission {% endcomment %}
+<div style="flex:1;" class="col-md-6 mb-4 container">
+  <div class="pt-5">
+  <div class="pt-2 card text-center container h-300  bg-white bg-opacity-50">
+    <div class="card-head">
+      <h1 class="fs-5">Les Commandes optimisées</h1></div>
+    <div class="card-body">
+      <table class="table">
+          <thead>
+            <tr>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">date </th>
+              <th scope="col">Client</th>
+              <th scope="col">Profit</th>
+              <th scope="col">Ville de Depart</th>
+              <th scope="col">Ville de Destination</th>
+              <th scope="col">Action</th>
+            </tr>
+            </tr>
+          </thead>
+
+  {% for cmd in cmd %}
+  <tbody>
+     
+    <tr> 
+      <th scope="row"><a href="{{commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{cmd.id_commande}}</a></th>
+       <td><a href="{{commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{cmd.date_c}}</a></td>
+       <td><a href="{{commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{cmd.id_cl}}</a></td>
+       <td><a href="{{commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{cmd.profit}}</a></td>
+       <td><a href="{{commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{cmd.ville_dep}}</a></td>
+       <td><a href="{{commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{cmd.ville_arr}}</a></td>
+       <td>
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="cmd_id" value="{{ cmd.id_commande }}">
+          <button type="submit" class="btn btn-info" name="plus" value="plus"><i class="fa-solid fa-plus"></i></button>
+        </form>
+      </td>
+     </tr> 
+ 
+   
+  </tbody>
+  {% endfor %}
+</table>  
+</div>
+</div>
+</div>
+</div>
+</div>
+{% else %}
+<div class="pt-5 col-md-6 mb-4 container">ِ
+
+  <div class="card container">
+    <div class="card-header">
+      Pas de Commandes
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Aucune commande correspond a cette mission pour l'instant</h5>
+      <a href="{% url 'commande'%}" style="text-decoration: none; color: #002b57;" onmouseover="startAnimation(this)"
+      onmouseout="stopAnimation(this)">Voir d'autres commandes <i class="fa-solid fa-arrow-right" style="animation: none;"></i></a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endif %}
+
+
+
+<!-- Boîte modale -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirmer l'annulation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir annuler cette mission ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+        <form method="POST" action="{% url 'supprimer-mission' mission.id_mission %}" id="delete-form">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Annuler</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const deleteForm = document.getElementById('delete-form');
+  const deleteModal = document.getElementById('deleteModal');
+  const deleteButton = document.querySelector('[data-bs-target="#deleteModal"]');
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    deleteModal.addEventListener('shown.bs.modal', () => {
+      deleteForm.addEventListener('submit', (event) => {
+        deleteModal.hide();
+        if (!window.confirm('Êtes-vous sûr de vouloir annuler cette mission ?')) {
+          event.preventDefault();
+        }
+      });
+    });
+    deleteModal.show();
+  });
+
+
+ 
+
+</script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br>
+<br>
+<br>
+    <div class="container bg-white shadow-md p-5 form-layout rounded w-50 h-200">
+        <h3>Bienvenue, {{ user }}</h3>
+        <hr>
+
+        <p>Ce tableau de bord vous permet d'effectuer l'une des opérations suivantes</p>
+        {% if planificateur %}
+        <li>Suivre vos missions et Gérer votre compte</li>
+        {% else %}
+        <li> Suivre vos commandes et Gérer votre compte</li>
+        {% endif %}
+        
+    </div>
+
+    <br>
+
+    <div class="container bg-white shadow-md p-5 form-layout rounded w-50 h-200">
+        {% if planificateur %}
+        <h4> Suivez vos Missions </h4>
+        <hr>
+        <a class="btn btn-primary navbar-btn text-white btn-lg w-100 btn-block p-2" style="background-color: #002b57; " type="button" href="{% url 'suivie-user' %}">Mes Missions</a>
+        {% else %}
+        <h4> Suivez vos commandes </h4>
+        <hr>
+        <a class="btn btn-primary navbar-btn text-white btn-lg w-100 btn-block p-2" style="background-color: #002b57; " type="button" href="{% url 'suivie-user' %}">Mes commandes</a>
+        {% endif %}
+    </div>
+
+    <br>
+
+
+    <div class="container bg-white shadow-md p-5 form-layout rounded w-50 h-200">
+        <h4> gestion de votre compte </h4>
+        <hr>
+        
+        
+        
+        
+        <a class="btn btn-primary navbar-btn text-white btn-lg w-100 btn-block p-2" style="background-color: #002b57; " type="button" href="{% url 'profile-management' %}">Gestion de votre profil</a>
+        <br><br>
+        <a class="btn btn-primary navbar-btn text-white btn-lg w-100 btn-block p-2" style="background-color: #002b57; " type="button" href="{% url 'user-logout' %}">Déconnexion</a>
+
+    </div>
+
+    <br>
+
+    {% endblock %}

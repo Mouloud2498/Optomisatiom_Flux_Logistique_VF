@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content%}
+
+<div class="pt-5">
+<div class="card container bg-white bg-opacity-50 ">
+    <h5 class="card-header">{{commande.id_cl|capfirst}}</h5>
+    <div class="row">
+    <div class="card-body pt-2 col-md-4 mb-4">
+      <h5>Type Camion: {{ commande.id_tc }}</h5>
+      <h5>Ville de Depart: {{ commande.ville_dep|capfirst }}</h5>
+      <h5>Ville d'Arrivée: {{ commande.ville_arr|capfirst }}</h5>
+      <h5>Date et Heure de Depart: {{ commande.date_c |capfirst}}</h5>
+    </div>
+      <div class="pt-2 col-md-4 mb-4">
+      <h5>La durée: {{ heure }}h et {{ minute }}min</h5>
+      <h5 >Le Prix: {{ commande.prix }} DZ</h5>
+      <h5>Le côut est estimé a: {{ cout }}DZ</h5>
+      <h5>Le Profit: {{ profit }}DZ</h5>
+      </div>
+      {% if planificateur %}
+      {% if commande.id_mis is Null %}
+    </div>
+  </div>
+
+  {% comment %} {% if cms %}
+  <div class=" d-flex justify-content-center pt-5 container"><h1>Nos Camions En Mission</h1></div>
+<div class="pt-2 container card">
+<div class="card-body">
+  <table class="table">
+      <thead>
+        <tr>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Numero de la carte Grise</th>
+          <th scope="col">Chauffeur</th>
+          <th scope="col">Type du Camion</th>
+          <th scope="col">Type de Roues</th>
+          <th scope="col">Habillage</th>
+        </tr>
+        </tr>
+      </thead>
+
+      {% for camion in cms %}
+
+      <tbody>
+        <tr style="cursor:pointer;"> 
+          <th scope="row"><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_camion}}</a></th>
+           <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.num_carte_grise}}</a></td>
+           <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_chauffeur_cam}}</a></td>
+           <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_tca}}</a></td>
+           <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_tro}}</a></td>
+           <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_ha}}</a></td>
+         </tr> 
+     
+       
+      </tbody>
+
+      {% endfor %}
+    </table>  
+  </div>
+  </div>
+{% else %}
+<H5> Pas de camion en mission disponible</h5>
+{% endif %} {% endcomment %}
+
+
+<div class="pt-5">
+  {% if not camion %}
+  <div class="card container">
+    <div class="card-header">
+      Pas de Camions
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Pas de camion disponible pour l'instant</h5>
+      <a href="{% url 'commande'%}" class="btn btn-primary"  style="background-color: #002b57; " >Voir nos commandes</a>
+    </div>
+  </div>
+  {% else %}
+
+<div class="pt-2 container card bg-white bg-opacity-50">
+  <div class="card-head">
+    <h1 class="fs-3">Nos Camions</h1>
+</div>
+  <div class="card-body">
+    <table class="table">
+        <thead>
+          <tr>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Numero de la carte Grise</th>
+            <th scope="col">Chauffeur</th>
+            <th scope="col">Type du Camion</th>
+            <th scope="col">Type de Roues</th>
+            <th scope="col">Habillage</th>
+          </tr>
+          </tr>
+        </thead>
+          
+        {% for camion in camion %}
+
+        <tbody>
+          {% if not camion.source %}
+          <tr style="cursor:pointer;" class="bg-white">
+            {% else %}
+          <tr style="cursor:pointer;">
+            {% endif %} 
+            <th scope="row"><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_camion}}</a></th>
+             <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.num_carte_grise}}</a></td>
+             <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_chauffeur_cam}}</a></td>
+             <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_tca}}</a></td>
+             <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_tro}}</a></td>
+             <td><a href="{% url 'create-mission' commande.id_commande  camion.id_camion %}" style="text-decoration: none;color:black;">{{camion.id_ha}}</a></td>
+           </tr> 
+       
+         
+        </tbody>
+
+        {% endfor %}
+      </table>  
+    </div>
+    {% endif %}
+    </div>
+      {% else %}
+     
+      <h5> Cette commande a une mission:{{ commande.id_mis |capfirst }}  </h5>
+      {% endif %}
+      {% endif %}
+
+
+  </div>
+  </div>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+
+
+
+{% endblock %}

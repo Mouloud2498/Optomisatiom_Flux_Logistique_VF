@@ -1,0 +1,66 @@
+{% extends "./base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show {% if forloop.counter == 1 %}bg-danger{% endif %} custom-alert text-center" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+{% if commercial %}
+  <div>
+    <button type="button"  class="btn btn-danger"style="float: right; margin: 20px; "> <a href="{% url 'ajout-client' %}" style="text-decoration: none; color: white;"> <i class="fa fa-plus" aria-hidden="true"></i> Ajouter un Client</a></button>
+  </div>
+  {% endif %}
+
+
+<div class=" card pt-2 container bg-white bg-opacity-50">
+  <div class="card-head">
+    <h1 class="fs-2">Nos Clients</h1>
+  </div>
+  <div class="card-body">
+    <table class="table">
+        <thead>
+          <tr>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Client</th>
+            <th scope="col">Habillage</th>
+            {% if commercial %}
+            <th scope="col">Action</th>
+            {% endif %}
+          </tr>
+          </tr>
+        </thead>
+        {% for client in clients %}
+        <tbody>
+           
+           <tr style="cursor:pointer;"> 
+           <th scope="row"><a href="#" style="text-decoration: none;color:black;">{{client.client.id_client}}</a></th>
+            <td><a href="#" style="text-decoration: none;color:black;">{{client.client.nom_client  | capfirst}}</a></td>
+            <td><a href="#" style="text-decoration: none;color:black;"> {% if client.habillages %}
+                {% for habillage in client.habillages %}
+                  {{ habillage }}
+                  {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              {% else %}
+                Aucun habillage trouvé
+              {% endif %}</a></td>
+              {% if commercial %}
+              <td> 
+                <a href="{% url 'delete' client.client.id_client %}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+              </td>
+              {% endif %}
+          </tr> 
+        </tbody>
+        {% endfor %}
+      </table>  
+    </div> 
+  </div>
+</div>
+</div>
+{% endblock %}

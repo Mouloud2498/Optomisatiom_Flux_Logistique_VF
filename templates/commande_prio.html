@@ -1,0 +1,266 @@
+
+{% extends "./base.html" %}
+
+{% load static %}
+{% include 'trasport/commande_confirm_delete.html' %}
+
+{% block content %}
+<style>
+  @media (max-width: 991.98px) {
+    /* On small screens, display table cells as block elements with 100% width */
+    .table tbody,
+    .table thead,
+    .table th,
+    .table td,
+    .table tr {
+      display: block;
+      width: 100%;
+    }
+    
+    /* Hide the table header row on small screens */
+    .table thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    /* Show the table cells as stacked blocks */
+    .table td {
+      position: relative;
+      padding-left: 50%;
+      text-align: left;
+    }
+    
+    .table td::before {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: bold;
+    }
+    
+    /* Add content labels before each cell */
+    .table td:first-child::before { content: "ID"; }
+    .table td:nth-child(2)::before { content: "Client"; }
+    .table td:nth-child(3)::before { content: "Type de camion"; }
+    .table td:nth-child(4)::before { content: "Ville de depart"; }
+    .table td:nth-child(5)::before { content: "Ville d'arrivée"; }
+    .table td:nth-child(6)::before { content: "Prix"; }
+    .table td:nth-child(7)::before { content: "Profit"; }
+    .table td:nth-child(8)::before { content: "Nature de destination"; }
+    .table td:nth-child(9)::before { content: "Action"; }
+    .table td:last-child::before { content: "Date"; }
+  
+  }
+
+
+  .custom-pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .custom-pagination .page-item {
+    margin-right: 5px;
+  }
+  
+  .custom-pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    color: #002b57;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-pagination .page-link:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .custom-pagination .page-item.active .page-link {
+    background-color: #002b57;
+    color: #fff;
+    border-color: #002b57;
+  }
+  
+  .custom-pagination .page-item.disabled .page-link {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .custom-pagination .page-link i {
+    font-size: 16px;
+  }
+  
+  .custom-pagination .page-link i {
+    font-size: 16px;
+  }
+  
+
+</style>
+
+<br>
+<br>
+<div>
+{% if cmd_ifri %}
+<div class=" card pt-2 container bg-white bg-opacity-50">
+    <div class="card-head">
+      <div class="row">
+      <div class="col-md-4 mb-4">
+      <h1 class="fs-3">Nos Commandes Prioritaires</h1>
+      </div>
+      <div class="col-md-4 mb-4 container pt-3" style="padding: 5px; width: 600px; display: inline-block; margin-right: 50px; text-align: right;" >
+        <form class="form-inline" role="search" method="GET" action="{% url 'commande-prio' %}">
+          <input class="form-control-sm me-2" type="text" name="ville_dep" placeholder="Ville de départ" aria-label="Ville de départ" style="color: #999;">
+          <button class="btn btn-primary" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </form>
+      </div>
+      </div>
+    </div>
+        <!-- Affichage de la pagination -->
+  <div class="d-flex justify-content-center pt-2">
+    {% if cmd_ifri.has_previous or cmd_ifri.has_next %}
+    <nav>
+      <ul class="custom-pagination">
+        {% if cmd_ifri.has_previous %}
+        <li class="page-item ">
+          <a class="page-link" href="?page_commande=1" tabindex="-1" aria-disabled="true">
+            <i class="fa-solid fa-angle-double-left"></i>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page_commande={{ cmd_ifri.previous_page_number }}">
+            <i class="fa-solid fa-angle-left"></i>
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+            <i class="fa-solid fa-angle-double-left"></i>
+          </a>
+        </li>
+        <li class="page-item disabled blue">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+            <i class="fa-solid fa-angle-left"></i>
+          </a>
+        </li>
+        {% endif %}
+        
+        <li class="page-item {% if cmd_ifri.number == 1 %}active{% endif %}">
+          <a class="page-link" href="?page_ifri=1">1</a>
+        </li>
+        {% for num in cmd_ifri.paginator.page_range|slice:"1:" %}
+        <li class="page-item {% if cmd_ifri.number == num %}active{% endif %}">
+          <a class="page-link" href="?page_ifri={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        
+        {% if cmd_ifri.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page_ifri={{ cmd_ifri.next_page_number }}">
+            <i class="fa-solid fa-angle-right"></i>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page_ifri={{ total_page_ifri }}">
+            <i class="fa-solid fa-angle-double-right"></i>
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+            <i class="fa-solid fa-angle-right"></i>
+          </a>
+        </li>
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+            <i class="fa-solid fa-angle-double-right"></i>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+    
+  </div>
+  
+    <div class="card-body">
+      <table class="table">
+          <thead>
+            <tr>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Client</th>
+              <th scope="col">Type de camion</th>
+              <th scope="col">Ville Depart</th>
+              <th scope="col">Ville Arrivée</th>
+              <th scope="col">Prix</th>
+              <th scope="col">Profit</th>
+              <th scope="col">Date</th>
+              {% if commercial %}
+              <th scope="col">Action</th>
+              {% endif %}
+            </tr>
+            </tr>
+          </thead>
+          {% for commande in cmd_ifri %}
+          <tbody>
+             
+             <tr style="cursor:pointer;"> 
+             <td scope="row"><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_commande}}</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_cl}}</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_tc}}</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none; color:black;">{{commande.ville_dep}}</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.ville_arr}}</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.prix}}DZ</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.profit}}DZ</a></td>
+              <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.date_c}}</a></td>
+              {% if commercial %}
+              <td> 
+                <a href="{{ commande.redirect_update }}" class="btn btn-primary" style="background-color: #002b57; "><i class="fa-regular fa-file-pen " ></i></a>
+  
+                <a href="{% url 'supprimer-cmd' commande.id_commande %}" class="btn btn-danger"
+                onclick="event.preventDefault(); if (confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')) 
+                { document.getElementById('delete-form-{{ commande.id_commande }}').submit(); }">
+                <i class="fa-solid fa-trash"></i>
+                </a>
+                
+                
+                <form id="delete-form-{{ commande.id_commande }}" action="{% url 'supprimer-cmd' commande.id_commande %}" method="POST" style="display: none; ">
+                  {% csrf_token %}
+                  <input type="hidden" name="_method" value="DELETE">
+                </form>
+  
+              </td>
+              {% endif %}
+            </tr> 
+          </tbody>
+          {% endfor %}
+        </table>  
+      </div> 
+    </div>
+    </div>
+ {% else %}
+    <div class="card container">
+      <div class="card-header">
+        Pas de Commande 
+  
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Pas de commande avec ces caractéristiques pour l'instant</h5>
+        <a href="{% url 'commande-prio'%}" class="btn btn-primary"  style="background-color: #002b57; " >Revenir a la liste des commandes IFRI</a>
+      </div>
+    </div>
+    {% endif %} 
+
+<br>
+<br>
+<br>
+{% endblock %}  

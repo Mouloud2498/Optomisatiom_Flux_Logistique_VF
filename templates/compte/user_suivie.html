@@ -1,0 +1,157 @@
+{% extends "base.html" %} 
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if planificateur %}
+
+<div class="pt-5">
+
+      {% if not mission %}
+      <div class="card container">
+        <div class="card-header">
+          Pas de Missions
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Vous n'avez planifié aucune mission pour l'instant</h5>
+          <a href="{% url 'commande'%}" class="btn btn-primary">Planifiez des commandes</a>
+        </div>
+      </div>
+     
+      {% else %}
+      <div class=" d-flex justify-content-center container bg-white bg-opacity-75 w-25">
+      <h1 class="fs-3" >Mes Missions</h1>
+    </div>
+    </div>
+    <div class="pt-5">
+    <div class=" container card bg-white bg-opacity-50">
+      <div class="card-body">
+        <table class="table">
+            <thead>
+              <tr>
+              <tr>
+                <th scope="col">Nom </th>
+                <th scope="col">Date</th>
+                <th scope="col">Ville de Depart</th>
+                <th scope="col">Ville d'arrivée</th>
+                <th scope="col">Camions</th>
+              </tr>
+              </tr>
+            </thead>
+
+            {% for mission in mission %}
+            <tbody>
+               
+               <tr style="cursor:pointer;"> 
+                <th><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.nom_mission}}</a></th>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.date_mission}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_dep_mis}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_arr_mis}}</a></td>
+                <td><a href="{% url 'mission-info' mission.id_mission %}" style="text-decoration: none;color:black;">{{mission.id_cam}}</a></td>
+              </tr> 
+           
+             
+            </tbody>
+            {% endfor %}
+
+            
+          </table>  
+        </div>
+      </div>
+    </div>
+      {% endif %}
+
+    
+      <br>
+      <br>
+      <br>
+    
+{% else %}
+
+
+
+<div class="pt-5">
+
+      {% if not commande %}
+      <div class="card container">
+        <div class="card-header">
+          Pas de Commandes
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Vous n'avez ajouté aucune commande pour l'instant</h5>
+          <a href="{% url 'ajout'%}" class="btn btn-primary">Ajoutez des commandes</a>
+        </div>
+      </div>
+     
+      {% else %}
+      <div class=" card pt-2 container bg-white bg-opacity-50">
+      <div class="card-head">
+        <h1 class="fs-2">Mes Commandes</h1>
+      </div>
+      <div class="card-body">
+        <table class="table">
+            <thead>
+              <tr>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Client</th>
+                <th scope="col">Type de camion</th>
+                <th scope="col">Ville Depart</th>
+                <th scope="col">Ville Arrivée</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Profit</th>
+                <th scope="col">Nature de Destination</th>
+                <th scope="col">Date</th>
+                {% if commercial %}
+                <th scope="col">Action</th>
+                {% endif %}
+              </tr>
+              </tr>
+            </thead>
+            {% for commande in commande %}
+            <tbody>
+               
+               <tr style="cursor:pointer;"> 
+               <th scope="row"><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_commande}}</a></th>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_cl}}</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.id_tc}}</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none; color:black;">{{commande.ville_dep}}</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.ville_arr}}</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.prix}}DZ</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.profit}}DZ</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.nature_dest}}</a></td>
+                <td><a href="{{ commande.get_absolute_url}}" style="text-decoration: none;color:black;">{{commande.date_c}}</a></td>
+                <td> 
+                  <a href="{{ commande.redirect_update }}" class="btn btn-primary"><i class="fa-regular fa-file-pen"></i></a>
+                  <a href="{% url 'supprimer-cmd' commande.id_commande %}" class="btn btn-danger"
+     onclick="event.preventDefault(); if (confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')) { document.getElementById('delete-form-{{ commande.id_commande }}').submit(); }">
+    <i class="fa-solid fa-trash"></i>
+  </a>
+  <form id="delete-form-{{ commande.id_commande }}" action="{% url 'supprimer-cmd' commande.id_commande %}" method="POST" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="_method" value="DELETE">
+  </form>
+    
+                </td>
+              </tr> 
+            </tbody>
+            {% endfor %}
+          </table>  
+        </div> 
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+
+
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    
+{% endblock %}
