@@ -80,28 +80,13 @@ Les résultats sont évalués avec :
 
 | Indicateur | Avant (baseline) | Après (optimisation) | Gain |
 |---|---:|---:|---:|
-| Coût total | X | Y | -Z% |
-| Utilisation moyenne | X% | Y% | +Z pts |
-| Retards | X | Y | -Z% |
+| Coût total | 157000.00 | 98000 | -36% |
+| Utilisation moyenne | 65% | 89% | +18 pts |
+| Retards | 167 | 92 | -27% |
 
 ### Captures / Visuels
-Ajoute dans `assets/` :
-- `assets/overview.png` (contexte + schéma)
-- `assets/assignment_table.png` (extrait affectation)
-- `assets/kpi_comparison.png` (avant/après)
 
-Puis affiche-les ici :
-![Aperçu](assets/overview.png)
-![Affectation](assets/assignment_table.png)
-![KPI](assets/kpi_comparison.png)
+![Aperçu](bl.png)
 
----
 
-## 8) Comment exécuter le projet (Reproductibilité)
-> Mets ici ce que tu as réellement (Notebook, script Python, Excel, etc.)
 
-### Option Python (exemple)
-1. Cloner le repo
-```bash
-git clone https://github.com/Mouloud2498/NOM_DU_REPO.git
-cd NOM_DU_REPO
