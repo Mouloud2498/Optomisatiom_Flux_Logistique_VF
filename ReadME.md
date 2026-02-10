@@ -67,7 +67,7 @@ Une affectation manuelle ou “au feeling” peut entraîner :
 
 ## 6) KPI / Mesures d’impact
 Les résultats sont évalués avec :
-- **Coût total** (CAD / unité)
+- **Coût total** (DZ / unité)
 - **Taux d’utilisation** des camions (poids et volume)
 - **Nombre de commandes non assignées** (doit être 0 idéalement)
 - **Respect des délais** (on-time delivery %)
