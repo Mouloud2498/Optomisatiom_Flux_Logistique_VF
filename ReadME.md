@@ -76,7 +76,6 @@ Les résultats sont évalués avec :
 ---
 
 ## 7) Résultats (Avant / Après)
-📌 Ajoute ici tes chiffres quand tu les as (même approximatifs) :
 
 | Indicateur | Avant (baseline) | Après (optimisation) | Gain |
 |---|---:|---:|---:|
